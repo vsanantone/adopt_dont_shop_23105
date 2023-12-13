@@ -1,0 +1,105 @@
+  [1m[36mActiveRecord::SchemaMigration Pluck (1.2ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::InternalMetadata Pluck (1.0ms)[0m  [1m[34mSELECT "ar_internal_metadata"."value" FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1 LIMIT $2[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::InternalMetadata Pluck (0.2ms)[0m  [1m[34mSELECT "ar_internal_metadata"."value" FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1 LIMIT $2[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::InternalMetadata Pluck (0.1ms)[0m  [1m[34mSELECT "ar_internal_metadata"."value" FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1 LIMIT $2[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[35m (69.2ms)[0m  [1m[35mDROP DATABASE IF EXISTS "adopt_dont_shop_7_development"[0m
+  [1m[35m (42.8ms)[0m  [1m[35mDROP DATABASE IF EXISTS "adopt_dont_shop_7_test"[0m
+  [1m[35m (108.8ms)[0m  [1m[35mCREATE DATABASE "adopt_dont_shop_7_development" ENCODING = 'unicode'[0m
+  [1m[35m (45.6ms)[0m  [1m[35mCREATE DATABASE "adopt_dont_shop_7_test" ENCODING = 'unicode'[0m
+  [1m[35m (9.8ms)[0m  [1m[35mCREATE TABLE "schema_migrations" ("version" character varying NOT NULL PRIMARY KEY)[0m
+  [1m[35m (1.9ms)[0m  [1m[35mCREATE TABLE "ar_internal_metadata" ("key" character varying NOT NULL PRIMARY KEY, "value" character varying, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL)[0m
+  [1m[35m (0.4ms)[0m  [1m[34mSELECT pg_try_advisory_lock(1817017352383169265)[0m
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.5ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Migrating to CreateShelters (20230224211524)
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (3.3ms)[0m  [1m[35mCREATE TABLE "shelters" ("id" bigserial primary key, "foster_program" boolean, "name" character varying, "city" character varying, "rank" integer, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL)[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.2ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ($1) RETURNING "version"[0m  [["version", "20230224211524"]]
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT[0m
+Migrating to CreatePets (20230224211614)
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (2.6ms)[0m  [1m[35mCREATE TABLE "pets" ("id" bigserial primary key, "adoptable" boolean, "age" integer, "breed" character varying, "name" character varying, "shelter_id" bigint NOT NULL, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL, CONSTRAINT "fk_rails_92fb5d7a05"
+FOREIGN KEY ("shelter_id")
+  REFERENCES "shelters" ("id")
+)[0m
+  [1m[35m (0.3ms)[0m  [1m[35mCREATE INDEX "index_pets_on_shelter_id" ON "pets" ("shelter_id")[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.2ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ($1) RETURNING "version"[0m  [["version", "20230224211614"]]
+  [1m[36mTRANSACTION (4.0ms)[0m  [1m[35mCOMMIT[0m
+Migrating to CreateVeterinaryOffices (20230224211702)
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (1.6ms)[0m  [1m[35mCREATE TABLE "veterinary_offices" ("id" bigserial primary key, "boarding_services" boolean, "max_patient_capacity" integer, "name" character varying, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL)[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.1ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ($1) RETURNING "version"[0m  [["version", "20230224211702"]]
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT[0m
+Migrating to CreateVeterinarians (20230224213052)
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (2.6ms)[0m  [1m[35mCREATE TABLE "veterinarians" ("id" bigserial primary key, "on_call" boolean, "review_rating" integer, "name" character varying, "veterinary_office_id" bigint NOT NULL, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL, CONSTRAINT "fk_rails_d296209ae6"
+FOREIGN KEY ("veterinary_office_id")
+  REFERENCES "veterinary_offices" ("id")
+)[0m
+  [1m[35m (1.3ms)[0m  [1m[35mCREATE INDEX "index_veterinarians_on_veterinary_office_id" ON "veterinarians" ("veterinary_office_id")[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.5ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ($1) RETURNING "version"[0m  [["version", "20230224213052"]]
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mCOMMIT[0m
+Migrating to CreateApplications (20231207230939)
+  [1m[36mTRANSACTION (0.8ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (1.6ms)[0m  [1m[35mCREATE TABLE "application" ("id" bigserial primary key, "applicant_name" character varying, "address" character varying, "city" character varying, "state" character varying, "zip_code" integer, "description" character varying, "application_status" character varying DEFAULT 'In Progress', "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL)[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.1ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ($1) RETURNING "version"[0m  [["version", "20231207230939"]]
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mCOMMIT[0m
+Migrating to RenameApplicationToApplications (20231207231709)
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (0.1ms)[0m  [1m[35mALTER TABLE "application" RENAME TO "applications"[0m
+  [1m[35m (0.3ms)[0m  [1m[35mALTER INDEX "application_pkey" RENAME TO "applications_pkey"[0m
+  [1m[35m (0.1ms)[0m  [1m[35mALTER TABLE "public"."application_id_seq" RENAME TO "applications_id_seq"[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.1ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ($1) RETURNING "version"[0m  [["version", "20231207231709"]]
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT[0m
+Migrating to CreatePetApplications (20231208001437)
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (1.3ms)[0m  [1m[35mCREATE TABLE "pet_applications" ("id" bigserial primary key, "pet_id" bigint NOT NULL, "application_id" bigint NOT NULL, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL, CONSTRAINT "fk_rails_644ef5e080"
+FOREIGN KEY ("pet_id")
+  REFERENCES "pets" ("id")
+, CONSTRAINT "fk_rails_27aefd3fb1"
+FOREIGN KEY ("application_id")
+  REFERENCES "applications" ("id")
+)[0m
+  [1m[35m (0.3ms)[0m  [1m[35mCREATE INDEX "index_pet_applications_on_pet_id" ON "pet_applications" ("pet_id")[0m
+  [1m[35m (0.3ms)[0m  [1m[35mCREATE INDEX "index_pet_applications_on_application_id" ON "pet_applications" ("application_id")[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.2ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ($1) RETURNING "version"[0m  [["version", "20231208001437"]]
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT[0m
+Migrating to AddApprovedToPets (20231210203557)
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (1.0ms)[0m  [1m[35mALTER TABLE "pets" ADD "approved" boolean[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.2ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ($1) RETURNING "version"[0m  [["version", "20231210203557"]]
+  [1m[36mTRANSACTION (0.6ms)[0m  [1m[35mCOMMIT[0m
+Migrating to AddStatusToPetApplications (20231210210752)
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (0.6ms)[0m  [1m[35mALTER TABLE "pet_applications" ADD "status" character varying[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.1ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ($1) RETURNING "version"[0m  [["version", "20231210210752"]]
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.2ms)[0m  [1m[34mSELECT "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1 LIMIT $2[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mActiveRecord::InternalMetadata Create (0.2ms)[0m  [1m[32mINSERT INTO "ar_internal_metadata" ("key", "value", "created_at", "updated_at") VALUES ($1, $2, $3, $4) RETURNING "key"[0m  [["key", "environment"], ["value", "development"], ["created_at", "2023-12-13 23:25:37.562370"], ["updated_at", "2023-12-13 23:25:37.562370"]]
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT[0m
+  [1m[35m (0.2ms)[0m  [1m[34mSELECT pg_advisory_unlock(1817017352383169265)[0m
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.3ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.3ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mApplication Create (0.4ms)[0m  [1m[32mINSERT INTO "applications" ("applicant_name", "address", "city", "state", "zip_code", "description", "application_status", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING "id"[0m  [["applicant_name", "Victor Antonio Sanchez"], ["address", "97 Jaffa Road"], ["city", "Jerusalem"], ["state", "Israel"], ["zip_code", 9103401], ["description", "Because I'm rich! :)"], ["application_status", "In Progress"], ["created_at", "2023-12-13 23:25:37.638479"], ["updated_at", "2023-12-13 23:25:37.638479"]]
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mShelter Create (0.3ms)[0m  [1m[32mINSERT INTO "shelters" ("foster_program", "name", "city", "rank", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6) RETURNING "id"[0m  [["foster_program", false], ["name", "Aurora shelter"], ["city", "Aurora, CO"], ["rank", 9], ["created_at", "2023-12-13 23:25:37.646773"], ["updated_at", "2023-12-13 23:25:37.646773"]]
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mPet Create (1.1ms)[0m  [1m[32mINSERT INTO "pets" ("adoptable", "age", "breed", "name", "shelter_id", "created_at", "updated_at", "approved") VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING "id"[0m  [["adoptable", true], ["age", 5], ["breed", "tuxedo shorthair"], ["name", "Mr. Pirate"], ["shelter_id", 1], ["created_at", "2023-12-13 23:25:37.668608"], ["updated_at", "2023-12-13 23:25:37.668608"], ["approved", nil]]
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mPet Create (0.1ms)[0m  [1m[32mINSERT INTO "pets" ("adoptable", "age", "breed", "name", "shelter_id", "created_at", "updated_at", "approved") VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING "id"[0m  [["adoptable", true], ["age", 3], ["breed", "shorthair"], ["name", "Clawdia"], ["shelter_id", 1], ["created_at", "2023-12-13 23:25:37.671679"], ["updated_at", "2023-12-13 23:25:37.671679"], ["approved", nil]]
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mPet Create (0.1ms)[0m  [1m[32mINSERT INTO "pets" ("adoptable", "age", "breed", "name", "shelter_id", "created_at", "updated_at", "approved") VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING "id"[0m  [["adoptable", false], ["age", 3], ["breed", "ragdoll"], ["name", "Ann"], ["shelter_id", 1], ["created_at", "2023-12-13 23:25:37.673536"], ["updated_at", "2023-12-13 23:25:37.673536"], ["approved", nil]]
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mPetApplication Create (0.9ms)[0m  [1m[32mINSERT INTO "pet_applications" ("pet_id", "application_id", "created_at", "updated_at", "status") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["pet_id", 1], ["application_id", 1], ["created_at", "2023-12-13 23:25:37.688343"], ["updated_at", "2023-12-13 23:25:37.688343"], ["status", nil]]
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mPetApplication Create (0.2ms)[0m  [1m[32mINSERT INTO "pet_applications" ("pet_id", "application_id", "created_at", "updated_at", "status") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["pet_id", 2], ["application_id", 1], ["created_at", "2023-12-13 23:25:37.691208"], ["updated_at", "2023-12-13 23:25:37.691208"], ["status", nil]]
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT[0m
